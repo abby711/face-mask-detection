@@ -73,13 +73,13 @@ for layer in basemodel.layers:
     layer.trainable=False
 
 
-# compile our model
+
 print("***********compiling model*************")
 opt = Adam(lr=init_lr, decay=init_lr / epochs)
 model.compile(loss="binary_crossentropy", optimizer=opt,
 	metrics=["accuracy"])
 
-# train the head of the network
+
 print("**********training head************")
 H = model.fit(
 	aug.flow(trainx, trainy, batch_size=bs),
@@ -92,19 +92,18 @@ H = model.fit(
 print("*************** evaluating network**************")
 predIdxs = model.predict(testx, batch_size=bs)
 
-# for each image in the testing set we need to find the index of the
-# label with corresponding largest predicted probability
+
 predIdxs = np.argmax(predIdxs, axis=1)
 
-# show a nicely formatted classification report
+# classification report
 print(classification_report(testy.argmax(axis=1), predIdxs,
 	target_names=lb.classes_))
 
-# serialize the model to disk
+#  model to disk
 print("*************saving mask detector model***************")
 model.save("mask_detector.model", save_format="h5")
 
-# plot the training loss and accuracy
+# training loss and accuracy graph
 '''N = epochs
 plt.style.use("ggplot")
 plt.figure()
